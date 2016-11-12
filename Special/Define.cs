@@ -30,13 +30,27 @@ namespace Tree
 
             t = t.getCdr();
 
-            // determine if form is '(eval x e)'
+            // determine if the form is '(eval x e)'
             if(t.getCar().isSymbol())
             {
                 // evaluate e, then store into e1
                 Node e1 = t.getCdr().eval(env);
                 env.define(t.getCar(), e1);
             }
+
+            // if the expression is of the form '(define (x p1 ... pn) b1 ... bm)',
+            // construct the lambda expression
+            // (lambda(p1...pn) b1...bm)
+		    // then proceed as for the definition
+            // (define x(lambda(p1...pn) b1...bm))
+
+            if (t.getCar().isPair())
+            {
+                Node arg1 = t.getCar().getCar();
+                Cons arg2 = new Cons(new Ident("lambda"), new Cons(t.getCdr().getCar(), t.getCdr().getCar().getCdr()));
+                env.define(arg1, arg2);
+            }
+            return null;
         }
     }
 }
