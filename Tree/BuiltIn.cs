@@ -81,9 +81,9 @@ namespace Tree
                 {
                     Scanner s = new Scanner(Console.In);
                     TreeBuilder tb = new TreeBuilder();
-                    Parser p = new Parser(s,tb);
-                    Node n = (Node) p.parseExp();
-                    if(n != null)
+                    Parser p = new Parser(s, tb);
+                    Node n = (Node)p.parseExp();
+                    if (n != null)
                     {
                         return n;
                     }
@@ -106,7 +106,7 @@ namespace Tree
                     Console.Error.WriteLine("invalid arguemtent name given");
                     return Nil.getInstance();
                 }
-            } else if(argsAmount == 1)
+            } else if (argsAmount == 1)
             {
                 //symbol?
                 if (argsName.Equals("symbol?"))
@@ -167,122 +167,122 @@ namespace Tree
                     //return value unspecified
                     return new StringLit(" ");
                 }
-                else if (argsAmount == 2)
+            }
+            else if (argsAmount == 2)
+            {
+                //eq?
+                if (argsName.Equals("eq?"))
                 {
-                    //eq?
-                    if (argsName.Equals("eq?"))
+                    bool bt1 = firstArgs.isSymbol();
+                    bool bt2 = secondArgs.isSymbol();
+                    if (bt1 && bt2)
                     {
-                        bool bt1 = firstArgs.isSymbol();
-                        bool bt2 = secondArgs.isSymbol();
-                        if(bt1 && bt2)
-                        {
-                            bool bt3 = firstArgs.getName().Equals(secondArgs.getName());
-                            return BoolLit.getInstance(bt3);
-                        }
-                        else
-                        {
-                            bool bt4 = firstArgs == secondArgs;
-                            return BoolLit.getInstance(bt4);
-                        }
-                    }
-                    //cons
-                    else if (argsName.Equals("cons"))
-                    {
-                        return new Cons(firstArgs, secondArgs);
-                    }
-                    //set-car!
-                    else if (argsName.Equals("set-car!"))
-                    {
-                        firstArgs.setCar(secondArgs);
-                        //return value unspecified
-                        return new StringLit(" ");
-                    }
-                    //set-cdr!
-                    else if (argsName.Equals("set-cdr!"))
-                    {
-                        firstArgs.setCdr(secondArgs);
-                        //return value unspecified
-                        return new StringLit(" ");
-                    }
-                    //eval
-                    else if (argsName.Equals("eval"))
-                    {
-                        return firstArgs.eval((Environment)secondArgs);
-                    }
-                    //apply
-                    else if (argsName.Equals("apply"))
-                    {
-                        return firstArgs.apply(secondArgs);
-                    }
-
-                    //binary arithematic opecations tmp vars
-                    int bo1 = 0;
-                    int bo2 = 0;
-                    if (firstArgs.isNumber())
-                    {
-                        bo1 = firstArgs.getValue();
-                    }
-                    else if (secondArgs.isNumber())
-                    {
-                        bo2 = secondArgs.getValue();
+                        bool bt3 = firstArgs.getName().Equals(secondArgs.getName());
+                        return BoolLit.getInstance(bt3);
                     }
                     else
                     {
-                        Console.Error.WriteLine("invalid arguemtent name given");
-                        return Nil.getInstance();
-                    }
-                    //b+
-                    if (argsName.Equals("b+"))
-                    {
-                        return new IntLit(bo1 + bo2);
-                    }
-                    //b-
-                    else if (argsName.Equals("b-"))
-                    {
-                        return new IntLit(bo1 - bo2);
-                    }
-                    //b*
-                    else if (argsName.Equals("b*"))
-                    {
-                        return new IntLit(bo1 * bo2);
-                    }
-                    //b/
-                    else if (argsName.Equals("b/"))
-                    {
-                        return new IntLit(bo1 / bo2);
-                    }
-                    //b=
-                    else if (argsName.Equals("b="))
-                    {
-                        bool b = bo1 == bo2;
-                        return BoolLit.getInstance(b);
-                    }
-                    //b<
-                    else if (argsName.Equals("b<"))
-                    {
-                        bool b = bo1 < bo2;
-                        return BoolLit.getInstance(b);
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine("Aritheatic Operation Error");
-                        return Nil.getInstance();
+                        bool bt4 = firstArgs == secondArgs;
+                        return BoolLit.getInstance(bt4);
                     }
                 }
-                //invalid argsName given
+                //cons
+                else if (argsName.Equals("cons"))
+                {
+                    return new Cons(firstArgs, secondArgs);
+                }
+                //set-car!
+                else if (argsName.Equals("set-car!"))
+                {
+                    firstArgs.setCar(secondArgs);
+                    //return value unspecified
+                    return new StringLit(" ");
+                }
+                //set-cdr!
+                else if (argsName.Equals("set-cdr!"))
+                {
+                    firstArgs.setCdr(secondArgs);
+                    //return value unspecified
+                    return new StringLit(" ");
+                }
+                //eval
+                else if (argsName.Equals("eval"))
+                {
+                    return firstArgs.eval((Environment)secondArgs);
+                }
+                //apply
+                else if (argsName.Equals("apply"))
+                {
+                    return firstArgs.apply(secondArgs);
+                }
+                else
+                {
+                    return Nil.getInstance();
+                }
+
+                //binary arithematic opecations tmp vars
+                int bo1 = 0;
+                int bo2 = 0;
+                if (firstArgs.isNumber())
+                {
+                    bo1 = firstArgs.getValue();
+                }
+                else if (secondArgs.isNumber())
+                {
+                    bo2 = secondArgs.getValue();
+                }
                 else
                 {
                     Console.Error.WriteLine("invalid arguemtent name given");
                     return Nil.getInstance();
                 }
-                
+                //b+
+                if (argsName.Equals("b+"))
+                {
+                    return new IntLit(bo1 + bo2);
+                }
+                //b-
+                else if (argsName.Equals("b-"))
+                {
+                    return new IntLit(bo1 - bo2);
+                }
+                //b*
+                else if (argsName.Equals("b*"))
+                {
+                    return new IntLit(bo1 * bo2);
+                }
+                //b/
+                else if (argsName.Equals("b/"))
+                {
+                    return new IntLit(bo1 / bo2);
+                }
+                //b=
+                else if (argsName.Equals("b="))
+                {
+                    bool b = bo1 == bo2;
+                    return BoolLit.getInstance(b);
+                }
+                //b<
+                else if (argsName.Equals("b<"))
+                {
+                    bool b = bo1 < bo2;
+                    return BoolLit.getInstance(b);
+                }
+                else
+                {
+                    Console.Error.WriteLine("Aritheatic Operation Error");
+                    return Nil.getInstance();
+                }
             }
+            //invalid argsName given
             else
             {
-                Console.Error.WriteLine("invalid amount of arguements");
+                Console.Error.WriteLine("invalid arguemtent name given");
                 return Nil.getInstance();
             }
-           
+            
+            return Nil.getInstance();
+
     	}
     }    
 }
