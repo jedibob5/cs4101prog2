@@ -105,13 +105,37 @@ namespace Tree
 
         public void define(Node id, Node val)
         {
-            // TODO: implement this function
+            // if frame doesn't exist in scope, create new frame
+            if (find(id, val) == null)
+            {
+                frame = new Cons(new Cons(id, new Cons(val, Nil.getInstance())), frame);
+            }
+            else
+            {
+                // else, if frame does exist in scope, set term to val
+                find(id, val).setCar(val);
+            }
+
         }
 
 
         public void assign(Node id, Node val)
         {
-            // TODO: implement this function
+            // if the term and the env are null, variable undefined (error state)
+            if (find(id, val) == null && env == null)
+            {
+                Console.Error.WriteLine("undefined variable: " + id.getName());
+            }
+            else if (find(id, val) == null)
+            {
+                // else, if the term is undefined (and env is), assign the term to env
+                env.assign(id, val);
+            }
+            else
+            {
+                // else, if both term and env are defined, set the car of the term to val
+                find(id, frame).setCar(val);
+            }
         }
     }
 }
