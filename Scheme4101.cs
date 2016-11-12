@@ -5,8 +5,15 @@ using Parse;
 using Tokens;
 using Tree;
 
+//needed for i-e in builtin
+using Environment = Tree.Environment;
+
 public class Scheme4101
 {
+
+    //need for i-e in builtin
+    public static Environment env = null;
+
     public static int Main(string[] args)
     {
         // Create scanner that reads from standard input
@@ -53,8 +60,8 @@ public class Scheme4101
         // create the top-level environment
 
         // Read-eval-print loop
-        Tree.Environment env = new Tree.Environment();
-        Node id = new Ident("symbol?");
+        env = new Tree.Environment();
+        Ident id = new Ident("symbol?");
         env.define(id, new BuiltIn(id));
         id = new Ident("number?");
         env.define(id, new BuiltIn(id));
@@ -105,7 +112,7 @@ public class Scheme4101
         root = (Node) parser.parseExp();
         while (root != null) 
         {
-            root.print(0);
+            root.eval(env).print(0);
             root = (Node) parser.parseExp();
         }
 

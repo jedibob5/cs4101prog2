@@ -80,6 +80,11 @@ namespace Tree
 
         public virtual bool isProcedure() { return false; }
 
+        public virtual int getValue()
+        {
+            return 0;
+        }
+
         public virtual Node apply(Node args)
         {
             return new StringLit("Error: method apply() called on invalid object (not a BuiltIn or Closure)");

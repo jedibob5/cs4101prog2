@@ -8,6 +8,9 @@ namespace Tree
     {
         private string stringVal;
 
+        //needed for builtin
+        public static bool quoted = true;
+
         public StringLit(string s)
         {
             stringVal = s;
@@ -15,7 +18,23 @@ namespace Tree
 
         public override void print(int n)
         {
-            Printer.printStringLit(n, stringVal);
+            if (quoted)
+            {
+                Printer.printStringLit(n, stringVal);
+            }
+            //builtin display
+            else
+            {
+                for(int i = 0; i < n; i = i + 1)
+                {
+                    Console.Write(" ");
+                }
+                Console.Write(stringVal);
+                if(n >= 0)
+                {
+                    Console.WriteLine();
+                }
+            }
         }
 
         public override bool isString()

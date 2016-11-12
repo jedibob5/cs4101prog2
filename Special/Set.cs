@@ -12,6 +12,17 @@ namespace Tree
         {
             Printer.printSet(t, n, p);
         }
+
+        public override Node eval(Node t, Environment env)
+        {
+            //get tmp environment arguements
+            Node tmp1 = t.getCdr().getCar();
+            Node tmp2 = t.getCdr().getCdr().getCar();
+            //redefine environment
+            env.define(tmp1, tmp2);
+            //return empty string object
+            return new StringLit("");
+        }
     }
 }
 

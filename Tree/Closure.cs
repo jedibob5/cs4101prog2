@@ -52,7 +52,8 @@ namespace Tree
                 args = args.getCdr();
             }
 
-            Node funBody = ;
+            return Nil.getInstance();
+            //Node funBody = ;
         }
     }    
 }
