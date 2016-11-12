@@ -39,22 +39,23 @@ namespace Tree
         // every list element (every frame) is an association list.
         // Instead of Nil(), we use null to terminate the list.
 
-        private Node frame;     	// the innermost scope, an assoc list
-	    private Environment env;	// the enclosing environment
-   
+        private Node frame;         // the innermost scope, an assoc list
+        private Environment env;    // the enclosing environment
+
         public Environment()
         {
             frame = Nil.getInstance();
             env = null;
         }
-   
+
         public Environment(Environment e)
-	{
+        {
             frame = Nil.getInstance();
             env = e;
         }
 
-        public override void print(int n) {
+        public override void print(int n)
+        {
             // there got to be a more efficient way to print n spaces
             for (int i = 0; i < n; i++)
                 Console.Write(' ');
@@ -72,7 +73,7 @@ namespace Tree
         // translation of the Scheme assq function.
         private static Node find(Node id, Node alist)
         {
-            if (! alist.isPair())
+            if (!alist.isPair())
                 return null;	// in Scheme we'd return #f
             else
             {
@@ -99,19 +100,43 @@ namespace Tree
                 return env.lookup(id);
             else
                 // get the value out of the list we got from find()
-		return val.getCar();
+                return val.getCar();
         }
 
 
         public void define(Node id, Node val)
         {
-            // TODO: implement this function
+            // if frame doesn't exist in scope, create new frame
+            if (find(id, val) == null)
+            {
+                frame = new Cons(new Cons(id, new Cons(val, Nil.getInstance())), frame);
+            }
+            else
+            {
+                // else, if frame does exist in scope, set term to val
+                find(id, val).setCar(val);
+            }
+
         }
 
 
         public void assign(Node id, Node val)
         {
-            // TODO: implement this function
+            // if the term and the env are null, variable undefined (error state)
+            if (find(id, val) == null && env == null)
+            {
+                Console.Error.WriteLine("undefined variable: " + id.getName());
+            }
+            else if (find(id, val) == null)
+            {
+                // else, if the term is undefined (and env is), assign the term to env
+                env.assign(id, val);
+            }
+            else
+            {
+                // else, if both term and env are defined, set the car of the term to val
+                find(id, frame).setCar(val);
+            }
         }
     }
 }

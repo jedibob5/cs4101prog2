@@ -6,40 +6,44 @@ namespace Tree
 {
     public class Let : Special
     {
-	public Let() { }
+        public Let() { }
 
         public override void print(Node t, int n, bool p)
         {
             Printer.printLet(t, n, p);
         }
 
+        // to evaluate an expression of the form '(let ((x1 e1) ... (xn en)) b1 ... bm)',
+        // recursively evaluate e1 ... en, and call the results e1' ... en'
+        // construct an association list ((x1 e1') ... (xn en'))
+        // create a new environment, env1, by 'cons-ing' the assoc. list in front of 'env'
+        // recursively evaluate b1 ... bm in the new environment env1, and return the
+        // result of evaluating bm.
         public override Node eval(Node t, Environment env)
         {
+            // error state
+            if (t.getCdr() == Nil.getInstance())
+            {
+                Console.Error.WriteLine("Special form 'Begin' evaluated with no arguments");
+                return Nil.getInstance();
+            }
 
-            //set tmpNode to cdr of t
-            Node tmpNode = t.getCdr();
-            //go through items in tmpNode
-            while(tmpNode.getCdr() != Nil.getInstance())
+            // get cdr of t to eval
+            Node temp = t.getCdr();
+
+            // construct a new environment for the Let expression
+            Environment e = new Environment(env);
+
+            while (temp.getCar() != Nil.getInstance())
             {
-                //define tmp variable for environment
-                Node tmp1 = tmpNode.getCar().getCar();
-                Node tmp2 = tmpNode.getCar().getCdr().getCar();
-                //redefine environment based on tmp Nodes
-                env.define(tmp1, tmp2);
-                //progress tmpNode to next item
-                tmpNode = tmpNode.getCdr();
+                e.define(temp.getCar().getCar(), temp.getCar().getCdr().getCar().eval(e));
+                temp = temp.getCdr();
             }
-            //check status of node
-            if (tmpNode.getCar().isSymbol())
-            {
-                return env.lookup(tmpNode.getCar());
-            }
-            else
-            {
-                return tmpNode.getCar().eval(env);
-            }
+
+            return t.getCdr().getCdr().getCar().eval(e);
         }
     }
 }
+
 
 
