@@ -216,8 +216,8 @@ namespace Tree
                     }
 
                     //binary arithematic opecations tmp vars
-                    int bo1;
-                    int bo2;
+                    int bo1 = 0;
+                    int bo2 = 0;
                     if (firstArgs.isNumber())
                     {
                         bo1 = firstArgs.getValue();
@@ -232,11 +232,42 @@ namespace Tree
                         return Nil.getInstance();
                     }
                     //b+
-                    if (argsName.Equals("b+") && firstArgs.isNumber() && secondArgs.isNumber())
+                    if (argsName.Equals("b+"))
                     {
                         return new IntLit(bo1 + bo2);
                     }
                     //b-
+                    else if (argsName.Equals("b-"))
+                    {
+                        return new IntLit(bo1 - bo2);
+                    }
+                    //b*
+                    else if (argsName.Equals("b*"))
+                    {
+                        return new IntLit(bo1 * bo2);
+                    }
+                    //b/
+                    else if (argsName.Equals("b/"))
+                    {
+                        return new IntLit(bo1 / bo2);
+                    }
+                    //b=
+                    else if (argsName.Equals("b="))
+                    {
+                        bool b = bo1 == bo2;
+                        return BoolLit.getInstance(b);
+                    }
+                    //b<
+                    else if (argsName.Equals("b<"))
+                    {
+                        bool b = bo1 < bo2;
+                        return BoolLit.getInstance(b);
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("Aritheatic Operation Error");
+                        return Nil.getInstance();
+                    }
                 }
                 //invalid argsName given
                 else
