@@ -6,7 +6,7 @@ namespace Tree
 {
     public class Define : Special
     {
-	public Define() { }
+        public Define() { }
 
         public override void print(Node t, int n, bool p)
         {
@@ -16,7 +16,7 @@ namespace Tree
         public override Node eval(Node t, Environment env)
         {
             // if cdr is null, define call has no arguments (error state)
-            if(t.getCdr() == Nil.getInstance())
+            if (t.getCdr() == Nil.getInstance())
             {
                 Console.Error.WriteLine("Special form 'Define' evaluated with no arguments");
                 return Nil.getInstance();
@@ -30,15 +30,27 @@ namespace Tree
 
             t = t.getCdr();
 
-            // determine if form is '(eval x e)'
-            if(t.getCar().isSymbol())
+            // determine if the form is '(eval x e)'
+            if (t.getCar().isSymbol())
             {
                 // evaluate e, then store into e1
                 Node e1 = t.getCdr().eval(env);
                 env.define(t.getCar(), e1);
             }
 
-            return Nil.getInstance();
+            // if the expression is of the form '(define (x p1 ... pn) b1 ... bm)',
+            // construct the lambda expression
+            // (lambda(p1...pn) b1...bm)
+            // then proceed as for the definition
+            // (define x(lambda(p1...pn) b1...bm))
+
+            if (t.getCar().isPair())
+            {
+                Node arg1 = t.getCar().getCar();
+                Cons arg2 = new Cons(new Ident("lambda"), new Cons(t.getCdr().getCar(), t.getCdr().getCar().getCdr()));
+                env.define(arg1, arg2);
+            }
+            return null;
         }
     }
 }

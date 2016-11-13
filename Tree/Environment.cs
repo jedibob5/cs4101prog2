@@ -79,8 +79,10 @@ namespace Tree
             {
                 Node bind = alist.getCar();
                 if (id.getName().Equals(bind.getCar().getName()))
+                {
                     // return a list containing the value as only element
                     return bind.getCdr();
+                }
                 else
                     return find(id, alist.getCdr());
             }
